@@ -1,0 +1,41 @@
+About
+================================================================================
+TVHData is a data service for the EPG software TV-Browser. It loads the channel
+list and the EPG (electronic program guide) from a tvheadend server, so that
+TV-Browser shows exactly the channels and programs your tvheadend receives.
+
+TVHData was inspired by VDR DataService by Henrik Niehaus, which does the same
+for a VDR (https://github.com/hampelratte/VDR-Data-Service). Many thanks to
+Henrik Niehaus. TVHData is a separate project: please ask questions, make
+suggestions and report problems at https://github.com/Sagestum/tvhdata.
+
+TVHData works well together with TVHsync (https://github.com/Sagestum/tvhsync),
+which manages the recordings of tvheadend from TV-Browser.
+
+
+Requirements
+================================================================================
+ * Java 11 or newer
+ * TV-Browser >= 4.2.3
+ * tvheadend 4.2 or newer with the HTTP API enabled (default)
+
+
+Installation
+================================================================================
+ 1. Copy TVHData.jar into the plugin directory of TV-Browser
+    (e.g. ~/.var/app/org.tvbrowser.TVBrowser/.config/tvbrowser/4.2.7/plugins
+    for the flatpak) and restart TV-Browser.
+ 2. Settings -> Plugins/Data services -> TVHData: enter the URL of tvheadend
+    (e.g. http://192.168.1.11:9981), user name and password if needed, and
+    optionally choose a channel tag to limit the channel list.
+ 3. Settings -> Channels: refresh the channel list and add the channels of the
+    group "tvheadend".
+ 4. Update the TV data as usual.
+
+tvheadend only knows the EPG from now on. Programs of today, which have already
+been shown, are kept from the previous update.
+
+
+License
+================================================================================
+TVHData is published under a BSD license. Read the LICENSE file for details.

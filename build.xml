@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+
+<project name="TVHData" default="jar" basedir=".">
+
+	<property name="build.properties" value="build.properties"/>
+	<property file="${build.properties}"/>
+	<fail message="Define property 'tvbrowser.runtime.dir' in ${build.properties} - this should point to directory containing 'tvbrowser.jar'." unless="tvbrowser.runtime.dir" />
+	<fail message="Define property 'version' in ${build.properties}" unless="version" />
+
+	<property name="src.dir" value="src" />
+	<property name="build.dir" value="build" />
+	<property name="classes.dir" value="${build.dir}/classes" />
+	<property name="res.dir" value="res" />
+	<property name="doc.dir" value="${res.dir}/docs"/>
+	<property name="jar.file" value="${build.dir}/TVHData.jar"/>
+
+	<target name="compile">
+		<mkdir dir="${classes.dir}" />
+		<javac
+			release="${java.required.version}"
+			srcdir="${src.dir}" destdir="${classes.dir}" deprecation="true" debug="true" encoding="utf-8" includeantruntime="false">
+			<classpath>
+				<pathelement location="${tvbrowser.runtime.dir}/tvbrowser.jar" />
+			</classpath>
+		</javac>
+	</target>
+
+	<target name="jar" depends="compile">
+		<copy todir="${classes.dir}/tvhdata">
+			<fileset dir="${res.dir}/language" includes="**/*.properties" />
+		</copy>
+		<jar destfile="${jar.file}" basedir="${classes.dir}" />
+	</target>
+
+	<target name="install" depends="jar" description="Copy the plugin to the TV-Browser plugin directory of the current user">
+		<fail message="Define property 'plugin.install.dir' in ${build.properties}" unless="plugin.install.dir" />
+		<!-- copy and rename instead of overwriting, so that a running TV-Browser keeps reading the old jar -->
+		<copy file="${jar.file}" tofile="${plugin.install.dir}/TVHData.jar.tmp" overwrite="true" />
+		<move file="${plugin.install.dir}/TVHData.jar.tmp" tofile="${plugin.install.dir}/TVHData.jar" overwrite="true" />
+	</target>
+
+	<target name="clean">
+		<delete dir="${build.dir}"/>
+	</target>
+
+	<target name="release" depends="clean,jar" description="Make distribution zip">
+		<zip destfile="${build.dir}/TVHData-${version}.zip">
+			<zipfileset file="${jar.file}" prefix="TVHData-${version}" />
+			<zipfileset dir="${doc.dir}" prefix="TVHData-${version}" />
+		</zip>
+	</target>
+
+</project>
